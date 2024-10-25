@@ -18,11 +18,11 @@ age_mapping = {
     8: "70+",
 }
 
-ip = os.getenv("EC2_IP", "localhost")
+ip = os.getenv("EC2_IP", "172.17.0.1")
 
 
 def load_data():
-    url = f"http://{ip}:8022/all"
+    url = f"http://{ip}:3003/all"
     r = requests.get(url).json()
     return r
 
@@ -31,13 +31,13 @@ data = load_data()
 df = pd.DataFrame(data)
 
 for i in range(len(df)):
-    p = df["prediction_result"][i]
+    p = df["predictionResult"][i]
     r = df["answer"][i]
 
     if p is not None and r is not None:
         with st.container(border=True):
             img, info = st.columns([1, 3])
-            img.image(df["file_path"][i], width=100)
+            img.image(df["filePath"][i], width=100)
             p_age = age_mapping[int(p)]
             r_age = age_mapping[int(r)]
             info.markdown("")

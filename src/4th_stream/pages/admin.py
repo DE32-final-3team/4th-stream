@@ -4,8 +4,8 @@ import numpy as np
 import requests
 import os
 
-PASSWORD = os.getenv("PWD", "0000")
-ip = os.getenv("EC2_IP", "localhost")
+PASSWORD = os.getenv("PASSWD", "0000")
+ip = os.getenv("EC2_IP", "172.17.0.1")
 
 age_mapping = {
     0: "0-2 years",
@@ -27,7 +27,7 @@ if "logged_in" not in st.session_state:
 
 
 def load_data():
-    url = f"http://{ip}:8022/all"
+    url = f"http://{ip}:3003/all"
     r = requests.get(url).json()
     return r
 
@@ -51,7 +51,7 @@ def admin_page():
     df = pd.DataFrame(data)
 
     for i in range(len(df)):
-        p = df["prediction_result"][i]
+        p = df["predictionResult"][i]
         r = df["answer"][i]
 
         p_age = p if pd.isnull(p) else age_mapping[int(p)]
@@ -59,14 +59,15 @@ def admin_page():
 
         with st.container(border=True):
             img, info = st.columns([1, 3])
-            img.image(df["file_path"][i], width=100)
+            img.image(df["filePath"][i], width=100)
 
             with info.container():
                 h1, h2 = st.columns([3, 1])
-                h1.markdown(f"#### {df['num'][i]}. {df['origin_name'][i]}")
+                h1.markdown(f"#### {df['num'][i]}. {df['originName'][i]}")
                 if h2.button("Delete", key=f"delete{i}", type="primary"):
-                    url = f"http://{ip}:8022/delete?num={df['num'][i]}"
-                    r = requests.get(url)
+                    url = f"http://{ip}:3003/delete"
+                    params = {"num": df["num"][i]}
+                    r = requests.delete(url, params=params)
                     st.rerun()
 
                 r1, r2 = st.columns([1, 1])
@@ -77,9 +78,12 @@ def admin_page():
                     "정답 업데이트", options=age_mapping.values(), key=f"{i}_label"
                 )
                 if st.button("Update", key=f"updafe{i}"):
-                    url = f"http://{ip}:8022/up?num={df['num'][i]}&label={reversed_age_mapping[label]}"
-                    r = requests.get(url)
-
+                    url = f"http://{ip}:3003/update"
+                    params = {
+                        "num": df["num"][i],
+                        "answer": reversed_age_mapping[label],
+                    }
+                    r = requests.put(url, params=params)
                     if r.status_code == 200:
                         st.rerun()
 
