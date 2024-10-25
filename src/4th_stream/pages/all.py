@@ -18,7 +18,7 @@ age_mapping = {
     8: "70+",
 }
 
-ip = os.getenv("EC2_IP", "172.17.0.1")
+ip = os.getenv("EC2_IP", "localhost")
 
 
 def load_data():

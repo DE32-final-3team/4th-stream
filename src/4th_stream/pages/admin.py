@@ -5,7 +5,7 @@ import requests
 import os
 
 PASSWORD = os.getenv("PASSWD", "0000")
-ip = os.getenv("EC2_IP", "172.17.0.1")
+ip = os.getenv("EC2_IP", "localhost")
 
 age_mapping = {
     0: "0-2 years",

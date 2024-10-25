@@ -29,15 +29,20 @@ def find_face(img):
 
 
 def upload_img(img, name):
-    ip = os.getenv("EC2_IP", "172.17.0.1")
+    ip = os.getenv("EC2_IP", "localhost")
     url = f"http://{ip}:3003/uploadfile"
 
     img_bytes = io.BytesIO()
     img.save(img_bytes, format="JPEG")
     img_bytes.seek(0)
 
-    files = {"file": (name + ".jpeg", img_bytes, "image/jpeg")}
-    r = requests.post(url, files=files)
+    p_result = 1
+
+    params = {
+        "file": (name + ".jpeg", img_bytes, "image/jpeg"),
+        "prediction_result": (None, p_result),
+    }
+    r = requests.post(url, files=params)
     return r
 
 
