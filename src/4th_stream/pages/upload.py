@@ -21,6 +21,8 @@ age_mapping = {
     8: "70+ years",
 }
 
+reversed_age_mapping = {v: k for k, v in age_mapping.items()}
+
 # Load the age classifier model
 feature_extractor = ViTFeatureExtractor.from_pretrained("nateraw/vit-age-classifier")
 model = ViTForImageClassification.from_pretrained("nateraw/vit-age-classifier")
@@ -33,7 +35,7 @@ def predict_age(face_img):
         outputs = model(**inputs)
     predicted_class = outputs.logits.argmax(-1).item()
     predicted_age = age_mapping[predicted_class]
-    return predicted_age
+    return reversed_age_mapping[predicted_age]
 
 
 def find_face(img):
