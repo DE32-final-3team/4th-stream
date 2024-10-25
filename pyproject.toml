@@ -5,7 +5,19 @@ description = "Default template for PDM package"
 authors = [
     {name = "j25ng", email = "jsan2861@gmail.com"},
 ]
-dependencies = []
+dependencies = [
+    "streamlit>=1.39.0",
+    "mtcnn>=1.0.0",
+    "requests>=2.32.3",
+    "setuptools>=75.2.0",
+    "tensorflow>=2.18.0",
+    "opencv-python>=4.10.0.84",
+    "opencv-python-headless>=4.10.0.84",
+    "matplotlib>=3.9.2",
+    "torch>=2.5.0",
+    "transformers>=4.46.0",
+    "torchvision>=0.20.0",
+]
 requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
